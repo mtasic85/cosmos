@@ -53,7 +53,7 @@ result = main_task.join().result
 ```
 
 
-## Multi-threaded - EventLoop, Thread and Task
+## Multi-threaded - EventLoop, Task and Threads
 
 ```
 thread = import('thread')
