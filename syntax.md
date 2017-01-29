@@ -81,6 +81,8 @@ a = ? {
 
 ## Loops - while, for-in
 
+There is no way to explicitly break/continue or return from inside loop.
+
 ```
 a = 0
 
@@ -97,6 +99,13 @@ range = (b, e, s) -> {
     _ -> [nil, nil]
   }
 }
+
+range = (b, e, s) -> ? {
+    b < e -> [b, (_) -> range(b + s, e, s)]
+    _ -> [nil, nil]
+}
+
+range = (b, e, s) -> b < e ? [b, (_) -> range(b + s, e, s)] : [nil, nil]
 
 # manual loop iteration
 i, next = range(0, 10, 2)
