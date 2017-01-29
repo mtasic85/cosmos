@@ -16,7 +16,7 @@ d = 'some string'   # str
 
 ```
 a = [0, 1, nil] + []                    # array
-b = {-2, true, false} + {/}             # set
+b = {/ -2, true, false} + {/}           # set
 c = {'a': a, 'b': b, 'c': nil} + {}     # dict
 ```
 
@@ -26,6 +26,7 @@ Last expressions is return value.
 
 ```
 f = (x, y) -> {x + y}
+
 f = (x, y) -> x + y
 
 a = f(10, 20)
@@ -119,9 +120,10 @@ range(0, 10, 2) -> i @ i
 ```
 
 
-## List and Dict comprehension
+## List, Set and Dict comprehension
 
 ```
 a = [range(0, 10, 2) -> i @ i]
-b = {range(0, 10, 2) -> i @ [i, i]}
+b = {/ range(0, 10, 2) -> i @ i}
+c = {range(0, 10, 2) -> i @ [i, i]}
 ```
