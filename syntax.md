@@ -66,9 +66,16 @@ b = setattr(b, 'x', setattr(b.x, 'y', {z = 20}))
 ```
 x = 10
 
+# if/else
 a = x % 2 ? true : nil
 
+# match
 a = ? {x % 2 -> true; _ -> nil}
+
+a = ? {
+    x % 2 -> true
+    _ -> nil
+}
 ```
 
 
