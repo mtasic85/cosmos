@@ -15,7 +15,7 @@ d = 'some string'   # str
 ## Collections
 
 ```
-a = [0, 1, nil] + []                    # array
+a = [0, 1, nil] + []                    # list
 b = {/ -2, true, false} + {/}           # set
 c = {'a': a, 'b': b, 'c': nil} + {}     # dict
 ```
@@ -123,7 +123,22 @@ range(0, 10, 2) -> i @ i
 ## List, Set and Dict comprehension
 
 ```
-a = [range(0, 10, 2) -> i @ i]
-b = {/ range(0, 10, 2) -> i @ i}
-c = {range(0, 10, 2) -> i @ [i, i]}
+a = [range(0, 10, 2) -> i @ i]          # list
+b = {/ range(0, 10, 2) -> i @ i}        # set
+c = {range(0, 10, 2) -> i @ [i, i]}     # dict
+```
+
+
+## map, filter, reduce, chain
+
+```
+items = [range(0, 10, 2) -> i @ i]
+items = map(items, (n) -> n / 2)
+items = filter(items, (n) -> n % 2)
+result = reduce(items, (accu, n) -> {accu + n}, 0)
+
+result = chain(items)
+    .map((n) -> n / 2)
+    .filter((n) -> n % 2)
+    .reduce((accu, n) -> {accu + n}, 0)
 ```
