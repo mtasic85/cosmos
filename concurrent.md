@@ -6,9 +6,7 @@
 ```
 thread = import('thread')
 
-loop = thread.EventLoop()
-
-main_task = thread.Task(loop)
+main_task = thread.Task()
     .init((self) -> {
         self = (self.values = [])
         self = (self.senders = [])
@@ -29,11 +27,11 @@ main_task = thread.Task(loop)
     })
 
 tasks = [range(10) -> i @ {
-    thread.Task(loop)
+    thread.Task()
         .init((self) -> {
             self = (self.value = 1)
         })
-        .call((self) -> {
+        .resume((self) -> {
             main_task.send(self, self.value)
         })
         .recv((self, sender, v) -> {
@@ -55,9 +53,7 @@ result = main_task.join().result
 ```
 thread = import('thread')
 
-loop = thread.EventLoop()
-
-main_task = thread.Task(loop)
+main_task = thread.Task()
     .init((self) -> {
         self = (self.values = [])
         self = (self.senders = [])
@@ -78,14 +74,31 @@ main_task = thread.Task(loop)
     })
 
 threads = [range(10) -> i @ {
-    thread.Thread(loop)
+    thread.Thread()
         .init((self) -> {
-            self = (self.value = 1)
+            task = thread.Task()
+                .init((self) -> {
+                    self = (self.value = 1)
+                })
+                .resume((self) -> {
+                    main_task.send(self, self.value)
+                    self
+                })
+                .recv((self, sender, v) -> {
+                    ? {
+                        sender == main_task && v == nil -> self.done()
+                        _ -> self
+                    }
+                })
+
+            self = (self.task = task)
         })
-        .call((self) -> {
-            main_task.send(self, self.value)
+        .resume((self) -> {
+            self = (self.task = self.task.start())
         })
         .recv((self, sender, v) -> {
+            self = (self.task = self.task.send(sender, v))
+
             ? {
                 sender == main_task && v == nil -> self.done()
                 _ -> self

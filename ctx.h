@@ -22,10 +22,12 @@ typedef struct co_frame_t {
 
 #include "value.h"
 
-co_ctx_t *co_ctx_new(co_ctx_t *parent_ctx);
+co_ctx_t *co_ctx_alloc(co_ctx_t *parent_ctx);
 void co_ctx_free(co_ctx_t *ctx);
+void co_ctx_exec_path(co_ctx_t *ctx, char *path);
+void co_ctx_exec_frame(co_ctx_t *ctx, co_frame_t *frame);
 
-co_frame_t *co_frame_new(co_ctx_t *ctx, co_frame_t *parent_frame);
+co_frame_t *co_frame_alloc(co_ctx_t *ctx, co_frame_t *parent_frame);
 void co_frame_free(co_frame_t *frame);
 
 #endif
