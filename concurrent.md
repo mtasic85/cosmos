@@ -6,28 +6,30 @@
 ```
 thread = import('thread')
 
-main_task = thread.Task()
-    .init((self) -> {
-        self = (self.values = [])
-        self = (self.senders = [])
-        self = (self.result = nil)
-    })
-    .recv((self, sender, v) -> {
-        self = (self.values = self.values.append(v))
-        self = (self.senders = self.senders.append(sender))
+tasks = [
+    thread.Task('main')
+        .init((self) -> {
+            self = (self.values = [])
+            self = (self.senders = [])
+            self = (self.result = nil)
+        })
+        .recv((self, sender, v) -> {
+            self = (self.values = self.values.append(v))
+            self = (self.senders = self.senders.append(sender))
 
-        ? {
-            len(self.values) == 10 -> {
-                self = (self.result = sum(self.values))
-                self.senders -> s @ s.send(self, nil)
-                self = self.done()
+            ? {
+                len(self.values) == 10 -> {
+                    self = (self.result = sum(self.values))
+                    self.senders -> s @ s.send(self, nil)
+                    self = self.done()
+                }
+                _ -> self
             }
-            _ -> self
-        }
-    })
+        })
+]
 
-tasks = [range(10) -> i @ {
-    thread.Task()
+tasks += [
+    range(10) -> i @ thread.Task(i)
         .init((self) -> {
             self = (self.value = 1)
         })
@@ -36,15 +38,16 @@ tasks = [range(10) -> i @ {
         })
         .recv((self, sender, v) -> {
             ? {
-                sender == main_task && v == nil -> self.done()
+                sender.name == 'main' && v == nil -> self.done()
                 _ -> self
             }
         })
-}]
+]
 
-main_task = main_task.start()
-tasks = map(tasks, (t) -> t.start())
-result = main_task.join().result
+loop = thread.Loop(tasks)
+tasks_map = loop.exec()
+main_task = tasks_map['main']
+result = main_task.result
 ```
 
 
@@ -53,28 +56,30 @@ result = main_task.join().result
 ```
 thread = import('thread')
 
-main_task = thread.Task()
-    .init((self) -> {
-        self = (self.values = [])
-        self = (self.senders = [])
-        self = (self.result = nil)
-    })
-    .recv((self, sender, v) -> {
-        self = (self.values = self.values.append(v))
-        self = (self.senders = self.senders.append(sender))
+tasks = [
+    thread.Task('main')
+        .init((self) -> {
+            self = (self.values = [])
+            self = (self.senders = [])
+            self = (self.result = nil)
+        })
+        .recv((self, sender, v) -> {
+            self = (self.values = self.values.append(v))
+            self = (self.senders = self.senders.append(sender))
 
-        ? {
-            len(self.values) == 10 -> {
-                self = (self.result = sum(self.values))
-                self.senders -> s @ s.send(self, nil)
-                self = self.done()
+            ? {
+                len(self.values) == 10 -> {
+                    self = (self.result = sum(self.values))
+                    self.senders -> s @ s.send(self, nil)
+                    self = self.done()
+                }
+                _ -> self
             }
-            _ -> self
-        }
-    })
+        })
+]
 
-threads = [range(10) -> i @ {
-    thread.Thread()
+tasks += [
+    range(10) -> i @ thread.Thread(i)
         .init((self) -> {
             self = (self.value = 1)
         })
@@ -83,77 +88,14 @@ threads = [range(10) -> i @ {
         })
         .recv((self, sender, v) -> {
             ? {
-                sender == main_task && v == nil -> self.done()
+                sender.name == 'main' && v == nil -> self.done()
                 _ -> self
             }
         })
-}]
+]
 
-main_task = main_task.start()
-threads = map(threads, (t) -> t.start())
-result = main_task.join().result
-```
-
-
-## Multi-threaded - Concurrent Task and Tasks-in-Threads
-
-```
-thread = import('thread')
-
-main_task = thread.Task()
-    .init((self) -> {
-        self = (self.values = [])
-        self = (self.senders = [])
-        self = (self.result = nil)
-    })
-    .recv((self, sender, v) -> {
-        self = (self.values = self.values.append(v))
-        self = (self.senders = self.senders.append(sender))
-
-        ? {
-            len(self.values) == 10 -> {
-                self = (self.result = sum(self.values))
-                self.senders -> s @ s.send(self, nil)
-                self = self.done()
-            }
-            _ -> self
-        }
-    })
-
-threads = [range(10) -> i @ {
-    thread.Thread()
-        .init((self) -> {
-            task = thread.Task()
-                .init((self) -> {
-                    self = (self.value = 1)
-                })
-                .resume((self) -> {
-                    main_task.send(self, self.value)
-                    self
-                })
-                .recv((self, sender, v) -> {
-                    ? {
-                        sender == main_task && v == nil -> self.done()
-                        _ -> self
-                    }
-                })
-
-            self = (self.task = task)
-        })
-        .resume((self) -> {
-            self = (self.task = self.task.start())
-        })
-        .recv((self, sender, v) -> {
-            self = (self.task = self.task.send(sender, v))
-
-            ? {
-                sender == main_task && v == nil -> self.done()
-                _ -> self
-            }
-        })
-}]
-
-main_task = main_task.start()
-threads = map(threads, (t) -> t.start())
-result = main_task.join().result
+loop = thread.Loop(tasks)
+tasks_map = loop.exec()
+main_task = tasks_map['main']
+result = main_task.result
 ```
