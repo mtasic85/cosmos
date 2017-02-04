@@ -44,10 +44,11 @@ tasks += [
         })
 ]
 
-loop = thread.Loop(tasks)
-tasks_map = loop.exec()
-main_task = tasks_map['main']
-result = main_task.result
+# loop = thread.Loop(tasks)
+# tasks_map = loop.exec()
+# main_task = tasks_map['main']
+# result = main_task.result
+result = thread.Loop(tasks).exec()['main'].result
 ```
 
 
@@ -94,8 +95,9 @@ tasks += [
         })
 ]
 
-loop = thread.Loop(tasks)
-tasks_map = loop.exec()
-main_task = tasks_map['main']
-result = main_task.result
+# loop = thread.Loop(tasks)
+# tasks_map = loop.exec()
+# main_task = tasks_map['main']
+# result = main_task.result
+result = thread.Loop(tasks).exec()['main'].result
 ```
