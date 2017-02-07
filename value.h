@@ -1,6 +1,7 @@
 #ifndef CO_VALUE_H
 #define CO_VALUE_H
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -10,9 +11,9 @@ enum co_type_t;
 union _co_value_t;
 struct co_value_t;
 struct co_error_t;
-typedef _Bool _co_c_bool;
-typedef int64_t _co_c_int;
-typedef double _co_c_float;
+typedef _Bool co_c_bool;
+typedef int64_t co_c_int;
+typedef double co_c_float;
 struct co_str_t;
 struct co_list_t;
 struct _co_set_entry_t;
@@ -44,9 +45,9 @@ typedef enum co_type_t {
 
 typedef union _co_value_t {
     struct co_error_t *error;
-    _co_c_bool bool_;
-    _co_c_int int_;
-    _co_c_float float_;
+    co_c_bool bool_;
+    co_c_int int_;
+    co_c_float float_;
     struct co_str_t *str;
     struct co_list_t *list;
     struct co_set_t *set;
@@ -109,8 +110,7 @@ typedef struct co_dict_t {
 } co_dict_t;
 
 typedef struct co_code_t {
-    uint64_t len;
-    char *bytecode;
+    co_value_t *bytecode;   // string
 } co_code_t;
 
 typedef struct co_function_t {
