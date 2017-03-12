@@ -99,17 +99,17 @@ a < 10 @ {
 // generator
 range = (b, e, s) -> {
   ? {
-    b < e -> [b, (_) -> range(b + s, e, s)]
-    _ -> [nil, nil]
+    b < e -> {[b, (_) -> {range(b + s, e, s)}]}
+    _ -> {[nil, nil]}
   }
 }
 
 range = (b, e, s) -> ? {
-    b < e -> [b, (_) -> range(b + s, e, s)]
-    _ -> [nil, nil]
+    b < e -> {[b, (_) -> {range(b + s, e, s)}]}
+    _ -> {[nil, nil]}
 }
 
-range = (b, e, s) -> b < e ? [b, (_) -> range(b + s, e, s)] : [nil, nil]
+range = (b, e, s) -> {b < e ? [b, (_) -> {range(b + s, e, s)}] : [nil, nil]}
 
 // manual loop iteration
 i, next = range(0, 10, 2)
