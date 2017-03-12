@@ -21,7 +21,10 @@ test: (
     loop_test
 )
 
-loop_test: or_test [['->' NAME] '@' suite]
+loop_test: or_test [
+    (['->' NAME] '@' suite) |
+    ('?' test ':' test)
+]
 or_test: and_test ('||' and_test)*
 and_test: not_test ('&&' not_test)*
 not_test: '!' not_test | comp
@@ -45,7 +48,7 @@ atom: (
 )
 
 listmaker: test (',' test)* [',']
-dictsetmaker: test [(':'|'=') test] ((','|NEWLINE) test [(':'|'=') test])* [(','|NEWLINE)]
+dictsetmaker: '/' | (test [(':'|'=') test] ((','|NEWLINE) test [(':'|'=') test])* [(','|NEWLINE)])
 
 trailer: (
     '(' testlist ')' |
