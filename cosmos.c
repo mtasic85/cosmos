@@ -4,6 +4,47 @@
 #include <stdbool.h>
 
 //
+// c_str
+//
+struct co_c_str_t;
+
+typedef struct co_c_str_t {
+    size_t len;
+    char *items;
+} co_c_str_t;
+
+struct co_c_str_t *co_c_str_new(size_t len, char *items);
+bool co_c_str_free(struct co_c_str_t *str);
+int co_c_str_cmp(struct co_c_str_t *str, struct co_c_str_t *other);
+int co_c_str_cmp_with_cstr(struct co_c_str_t *str, size_t len, char *items);
+int co_c_str_cmp_with_char(struct co_c_str_t *str, char *items);
+struct co_c_str_t *co_c_str_add(struct co_c_str_t *str, struct co_c_str_t *other);
+struct co_c_str_t *co_c_str_add_with_cstr(struct co_c_str_t *str, size_t len, char *items);
+struct co_c_str_t *co_c_str_add_with_char(struct co_c_str_t *str, char *items);
+bool co_c_str_mut_add(struct co_c_str_t *str, struct co_c_str_t *other);
+bool co_c_str_mut_add_with_cstr(struct co_c_str_t *str, size_t len, char *items);
+bool co_c_str_mut_add_with_char(struct co_c_str_t *str, char *items);
+int co_c_str_index(struct co_c_str_t *str, struct co_c_str_t *other);
+
+//
+// c_list
+//
+struct co_c_list_t;
+
+typedef struct co_c_list_t {
+    size_t item_size;
+    size_t len;
+    size_t cap;
+    unsigned char *data;
+} co_c_list_t;
+
+struct co_c_list_t *co_c_list_new(size_t item_size, size_t cap);
+bool co_c_list_free(struct co_c_list_t *list);
+struct co_c_list_t *co_c_list_add(struct co_c_list_t *list, void *item_p);
+bool co_c_list_mut_add(struct co_c_list_t *list, void *item_p);
+int co_c_list_index(struct co_c_list_t *list, void *item_p);
+
+//
 // common
 //
 void co_c_error(const char *msg);
@@ -184,7 +225,7 @@ bool co_tokenizer_free(struct co_tokenizer_t *tokenizer) {
 }
 
 void co_tokenizer_nextsym(struct co_tokenizer_t *tokenizer) {
-    
+
 }
 
 struct co_parser_t *co_parser_new(struct co_tokenizer_t *tokenizer) {
