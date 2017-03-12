@@ -1,5 +1,5 @@
 # cosmos
-Cosmos - Functional Programming Language
+Cosmos - Lightweight Practical Functional Programming Language
 
 
 ## Syntax
