@@ -17,7 +17,7 @@ test: (
     loop_test
 )
 
-loop_test: or_test ['->' NAME '@' suite]
+loop_test: or_test [['->' NAME] '@' suite]
 or_test: and_test ('||' and_test)*
 and_test: not_test ('&&' not_test)*
 not_test: '!' not_test | comp

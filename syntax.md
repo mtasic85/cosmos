@@ -16,7 +16,7 @@ d = 'some string'   # str
 
 ```
 a = [0, 1, nil] + []                    # list
-b = {/ -2, true, false} + {/}           # set
+b = {-2, true, false} + {/}           # set
 c = {'a': a, 'b': b, 'c': nil} + {}     # dict
 ```
 
@@ -57,7 +57,7 @@ b = {
     }
 }
 
-b = (b.x = (b.x.y = {z = 20}))
+b = b.x = b.x.y = {z = 20}
 b = setattr(b, 'x', setattr(b.x, 'y', {z = 20}))
 ```
 
@@ -124,7 +124,7 @@ range(0, 10, 2) -> i @ i
 
 ```
 a = [range(0, 10, 2) -> i @ i]          # list
-b = {/ range(0, 10, 2) -> i @ i}        # set
+b = {range(0, 10, 2) -> i @ i}          # set
 c = {range(0, 10, 2) -> i @ [i, i]}     # dict
 ```
 

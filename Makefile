@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall -O0 -g
 LDFLAGS=-lpthread
-SOURCES=cosmos.c ctx.c value.c
+SOURCES=cosmos.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=cosmos
 
