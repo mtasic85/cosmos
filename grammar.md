@@ -1,3 +1,7 @@
+Grammar
+
+
+```
 suite: '{' stmtlist '}'
 stmtlist: stmt*
 stmt: expr_stmt (';'|NEWLINE)
@@ -48,3 +52,4 @@ trailer: (
     '[' testlist ']' |
     '.' NAME
 )
+```
