@@ -4,45 +4,60 @@
 #include <stdbool.h>
 
 //
-// c_str
+// c_storage
 //
-struct co_c_str_t;
+struct c_storage_t;
 
-typedef struct co_c_str_t {
-    size_t len;
-    char *items;
-} co_c_str_t;
-
-struct co_c_str_t *co_c_str_new(size_t len, char *items);
-bool co_c_str_free(struct co_c_str_t *str);
-int co_c_str_cmp(struct co_c_str_t *str, struct co_c_str_t *other);
-int co_c_str_cmp_with_cstr(struct co_c_str_t *str, size_t len, char *items);
-int co_c_str_cmp_with_char(struct co_c_str_t *str, char *items);
-struct co_c_str_t *co_c_str_add(struct co_c_str_t *str, struct co_c_str_t *other);
-struct co_c_str_t *co_c_str_add_with_cstr(struct co_c_str_t *str, size_t len, char *items);
-struct co_c_str_t *co_c_str_add_with_char(struct co_c_str_t *str, char *items);
-bool co_c_str_mut_add(struct co_c_str_t *str, struct co_c_str_t *other);
-bool co_c_str_mut_add_with_cstr(struct co_c_str_t *str, size_t len, char *items);
-bool co_c_str_mut_add_with_char(struct co_c_str_t *str, char *items);
-int co_c_str_index(struct co_c_str_t *str, struct co_c_str_t *other);
-
-//
-// c_list
-//
-struct co_c_list_t;
-
-typedef struct co_c_list_t {
-    size_t item_size;
-    size_t len;
+typedef struct c_storage_t {
     size_t cap;
     unsigned char *data;
-} co_c_list_t;
+} c_storage_t;
 
-struct co_c_list_t *co_c_list_new(size_t item_size, size_t cap);
-bool co_c_list_free(struct co_c_list_t *list);
-struct co_c_list_t *co_c_list_add(struct co_c_list_t *list, void *item_p);
-bool co_c_list_mut_add(struct co_c_list_t *list, void *item_p);
-int co_c_list_index(struct co_c_list_t *list, void *item_p);
+struct c_storage_t *co_c_storage_new(size_t cap);
+bool co_c_storage_free(struct c_storage_t *storage);
+
+
+//
+// c_array
+//
+struct co_c_array_t;
+
+typedef struct co_c_array_t {
+    size_t rc;
+    size_t len;
+    unsigned char *data;
+    struct c_storage_t *storage;
+} co_c_array_t;
+
+struct co_c_array_t *co_c_array_new(size_t item_size, size_t cap);
+bool co_c_array_free(struct co_c_array_t *array);
+void c_c_array_ref(struct co_c_array_t *array);
+void c_c_array_unref(struct co_c_array_t *array);
+int co_c_array_cmp(struct co_c_array_t *array, struct co_c_array_t *other);
+int co_c_array_cmp_with_cstr(struct co_c_array_t *array, size_t len, char *items);
+int co_c_array_cmp_with_char(struct co_c_array_t *array, char *items);
+struct co_c_array_t *co_c_array_append(struct co_c_array_t *array, void *value);
+bool co_c_array_mut_append(struct co_c_array_t *array, void *value);
+struct co_c_array_t *co_c_array_remove(struct co_c_array_t *array, void *value);
+bool co_c_array_mut_remove(struct co_c_array_t *array, void *value);
+int co_c_array_index(struct co_c_array_t *array, void *value);
+void *co_c_array_get(struct co_c_array_t *array, size_t index);
+struct co_c_array_t *co_c_array_set(struct co_c_array_t *array, size_t index, void *value);
+bool co_c_array_mut_set(struct co_c_array_t *array, size_t index, void *value);
+struct co_c_array_t *co_c_array_del(struct co_c_array_t *array, size_t index);
+bool co_c_array_mul_del(struct co_c_array_t *array, size_t index);
+struct co_c_array_t *co_c_array_clear(struct co_c_array_t *array);
+bool co_c_array_mul_clear(struct co_c_array_t *array);
+
+//
+// c_map
+//
+typedef struct co_c_map_t {
+    size_t rc;
+    size_t len;
+    unsigned char *data;
+    struct c_storage_t *storage;
+} co_c_map_t;
 
 //
 // common
