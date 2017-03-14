@@ -5,19 +5,19 @@
 ## Simple Values
 
 ```
-a = nil             # nil
-b = true || false   # bool
-c = -1 + 0.333      # int and float
-d = 'some string'   # str
+a = nil             // nil
+b = true || false   // bool
+c = -1 + 0.333      // int and float
+d = 'some string'   // str
 ```
 
 
 ## Collections
 
 ```
-a = [0, 1, nil] + []                    # list
-b = {/ -2, true, false} + {/}           # set
-c = {'a': a, 'b': b, 'c': nil} + {}     # dict
+a = [0, 1, nil] + []                    // list
+b = {-2, true, false} + {/}             // set
+c = {'a': a, 'b': b, 'c': nil} + {}     // dict
 ```
 
 ## Functions
@@ -26,8 +26,6 @@ Last expressions is return value.
 
 ```
 f = (x, y) -> {x + y}
-
-f = (x, y) -> x + y
 
 a = f(10, 20)
 ```
@@ -57,7 +55,7 @@ b = {
     }
 }
 
-b = (b.x = (b.x.y = {z = 20}))
+b = b.x = b.x.y = {z = 20}
 b = setattr(b, 'x', setattr(b.x, 'y', {z = 20}))
 ```
 
@@ -67,15 +65,20 @@ b = setattr(b, 'x', setattr(b.x, 'y', {z = 20}))
 ```
 x = 10
 
-# if/else
+// if/else
 a = x % 2 ? true : nil
 
-# match
-a = ? {x % 2 -> true; _ -> nil}
+// match
+a = ? {x % 2 -> {true}; _ -> {nil}}
 
 a = ? {
-    x % 2 -> true
-    _ -> nil
+    x % 2 -> {
+        true
+    }
+    
+    _ -> {
+        nil
+    }
 }
 ```
 
@@ -93,52 +96,54 @@ a < 10 @ {
 ```
 
 ```
-# generator
+// generator
 range = (b, e, s) -> {
   ? {
-    b < e -> [b, (_) -> range(b + s, e, s)]
-    _ -> [nil, nil]
+    b < e -> {[b, (_) -> {range(b + s, e, s)}]}
+    _ -> {[nil, nil]}
   }
 }
 
 range = (b, e, s) -> ? {
-    b < e -> [b, (_) -> range(b + s, e, s)]
-    _ -> [nil, nil]
+    b < e -> {[b, (_) -> {range(b + s, e, s)}]}
+    _ -> {[nil, nil]}
 }
 
-range = (b, e, s) -> b < e ? [b, (_) -> range(b + s, e, s)] : [nil, nil]
+range = (b, e, s) -> {b < e ? [b, (_) -> {range(b + s, e, s)}] : [nil, nil]}
 
-# manual loop iteration
+// manual loop iteration
 i, next = range(0, 10, 2)
 
 next @ {
   i, next = g()
 }
 
-# auto loop iteration - for-in
-range(0, 10, 2) -> i @ i
+// auto loop iteration - for-in
+range(0, 10, 2) -> i @ {
+    i
+}
 ```
 
 
 ## List, Set and Dict comprehension
 
 ```
-a = [range(0, 10, 2) -> i @ i]          # list
-b = {/ range(0, 10, 2) -> i @ i}        # set
-c = {range(0, 10, 2) -> i @ [i, i]}     # dict
+a = [range(0, 10, 2) -> i @ {i}]          # list
+b = {range(0, 10, 2) -> i @ {i}}          # set
+c = {range(0, 10, 2) -> i @ {[i, i]}}     # dict
 ```
 
 
 ## map, filter, reduce, chain
 
 ```
-items = [range(0, 10, 2) -> i @ i]
-items = map(items, (n) -> n / 2)
-items = filter(items, (n) -> n % 2)
+items = [range(0, 10, 2) -> {i @ i}]
+items = map(items, (n) -> {n / 2})
+items = filter(items, (n) -> {n % 2})
 result = reduce(items, (accu, n) -> {accu + n}, 0)
 
 result = chain(items)
-    .map((n) -> n / 2)
-    .filter((n) -> n % 2)
+    .map((n) -> {n / 2})
+    .filter((n) -> {n % 2})
     .reduce((accu, n) -> {accu + n}, 0)
 ```

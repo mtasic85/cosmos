@@ -1,2 +1,10 @@
 # cosmos
-Cosmos - Functional Programming Language
+Cosmos - Lightweight Practical Functional Programming Language
+
+
+## Syntax
+[Syntax](/syntax.md)
+
+
+## Grammar
+[Grammar](/grammar.md)
