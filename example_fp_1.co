@@ -1,0 +1,79 @@
+f = (x, y) -> {
+    x + y
+}
+
+f = (x, y) -> {x + y} 
+f = (x, y) -> x + y
+
+a = f(10, 20)
+
+? {
+    a == 10 -> true
+    a == 20 -> false
+    _ -> nil
+}
+
+? a == 10 -> true
+? a == 20 -> false
+? !(a == 10 || a == 20) -> nil
+
+b = range(0, 100)
+c = map(b, (n) -> {n * 2})
+d = filter(c, (n) -> {n % 2})
+e = reduce(d, 0, (accu, n) -> {accu + n})
+
+import = (path) -> ? {
+    __modules__!.hasitem(path) -> __modules__![path]
+    _ -> __modules__![path] = _import(path) // `__modules__!` is mutable
+}
+
+io = import('cosmos/io')
+io_1_0 = import('cosmos-1.0/io')
+
+print = (*args) -> {
+    each(args, (n) -> io.stdout(n))
+}
+
+print(10, '<', 20.0)
+
+each(range(100), (n) -> n * 2)
+
+// a = [i for i in range(100)]
+a = range(100)
+a = map(range(100))
+a = map(range(100), (i) -> i)
+
+// a = [i for i in range(100) if i % 2]
+a = filter(map(range(100), (i) -> i), (i) -> i % 2)
+
+// a = [i for j in range(100) for i in range(j) if i % 2]
+a = filter(flatten(map(range(100), (j) -> map(range(j), (i) -> i))), (i) -> i % 2)
+
+a = filter(
+    flatten(
+        map(
+            range(100),
+            (j) -> map(
+                range(j),
+                (i) -> i
+            )
+        )
+    ),
+    (i) -> i % 2
+)
+
+f = filter
+t = flatten
+m = map
+a = f(t(m(range(100), (j) -> m(range(j), (i) -> i))), (i) -> i % 2)
+
+
+f = (x) -> {
+    g = (y) -> {
+        x + y
+    }
+}
+
+f10 = f(10)
+g20 = f(20)
+g20 == 30
