@@ -67,9 +67,9 @@ typedef struct co_value_t {
 typedef struct co_error_t {
     co_value_t *error_type;         // string
     co_value_t *error_message;      // string
-    uint64_t line;                  // `
-    uint64_t column;                // | used only for unhandled errors
-    co_value_t *filename;           // /
+    // uint64_t line;                  // `
+    // uint64_t column;                // | used only for unhandled errors
+    // co_value_t *filename;           // /
 } co_error_t;
 
 typedef struct co_str_t {
