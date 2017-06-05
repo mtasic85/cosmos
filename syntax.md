@@ -22,11 +22,25 @@ c = {'a': a, 'b': b, 'c': nil} + {}     // dict
 
 ## Functions
 
-Last expressions is return value.
+Using `return` keyword:
+```
+f = (x, y) -> {
+    return x + y
+}
+```
 
+Last expressions is return value:
 ```
 f = (x, y) -> {x + y}
+```
 
+Or:
+```
+f = (x, y) -> x + y
+```
+
+Function call:
+```
 a = f(10, 20)
 ```
 
@@ -62,14 +76,16 @@ b = setattr(b, 'x', setattr(b.x, 'y', {z = 20}))
 
 ## Conditional - if, else, match
 
+If/else:
 ```
 x = 10
 
-// if/else
 a = x % 2 ? true : nil
+```
 
-// match
-a = ? {x % 2 -> {true}; _ -> {nil}}
+Match:
+```
+a = ? {x % 2 -> true; _ -> nil}
 
 a = ? {
     x % 2 -> {
@@ -86,7 +102,6 @@ a = ? {
 ## Loops - while, for-in
 
 There is no way to explicitly break/continue or return from inside loop.
-
 ```
 a = 0
 
@@ -95,30 +110,34 @@ a < 10 @ {
 }
 ```
 
+Generator:
 ```
-// generator
 range = (b, e, s) -> {
   ? {
-    b < e -> {[b, (_) -> {range(b + s, e, s)}]}
-    _ -> {[nil, nil]}
+    b < e -> [b, (_) -> range(b + s, e, s)]}
+    _ -> [nil, nil]
   }
 }
 
 range = (b, e, s) -> ? {
-    b < e -> {[b, (_) -> {range(b + s, e, s)}]}
-    _ -> {[nil, nil]}
+    b < e -> [b, (_) -> range(b + s, e, s)]}
+    _ -> [nil, nil]
 }
 
-range = (b, e, s) -> {b < e ? [b, (_) -> {range(b + s, e, s)}] : [nil, nil]}
+range = (b, e, s) -> b < e ? [b, (_) -> range(b + s, e, s)] : [nil, nil]
+```
 
-// manual loop iteration
+Manual loop iteration:
+```
 i, next = range(0, 10, 2)
 
-next @ {
+next != nil @ {
   i, next = g()
 }
+```
 
-// auto loop iteration - for-in
+Auto loop iteration - for-in:
+```
 range(0, 10, 2) -> i @ {
     i
 }
@@ -128,22 +147,17 @@ range(0, 10, 2) -> i @ {
 ## List, Set and Dict comprehension
 
 ```
-a = [range(0, 10, 2) -> i @ {i}]          # list
-b = {range(0, 10, 2) -> i @ {i}}          # set
-c = {range(0, 10, 2) -> i @ {[i, i]}}     # dict
+a = [range(0, 10, 2) -> i @ i]              # list
+b = {range(0, 10, 2) -> i @ i}              # set
+c = {range(0, 10, 2) -> i @ [str(i), i]}    # dict
 ```
 
 
-## map, filter, reduce, chain
+## map, filter, reduce
 
 ```
-items = [range(0, 10, 2) -> {i @ i}]
-items = map(items, (n) -> {n / 2})
-items = filter(items, (n) -> {n % 2})
-result = reduce(items, (accu, n) -> {accu + n}, 0)
-
-result = chain(items)
-    .map((n) -> {n / 2})
-    .filter((n) -> {n % 2})
-    .reduce((accu, n) -> {accu + n}, 0)
+items = [range(0, 10, 2) -> i @ i]
+items = map(items, (n) -> n / 2)
+items = filter(items, (n) -> n % 2)
+result = reduce(items, 0, (accu, n) -> accu + n)
 ```
