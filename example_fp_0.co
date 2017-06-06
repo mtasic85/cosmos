@@ -1,9 +1,0 @@
-items = [range(0, 10, 2) -> {i @ i}]
-items = map(items, (n) -> {n / 2})
-items = filter(items, (n) -> {n % 2})
-result = reduce(items, (accu, n) -> {accu + n}, 0)
-
-result = chain(items)
-    .map((n) -> {n / 2})
-    .filter((n) -> {n % 2})
-    .reduce((accu, n) -> {accu + n}, 0)
