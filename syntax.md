@@ -81,12 +81,14 @@ If/else:
 x = 10
 
 a = x % 2 ? true : nil
+
+// or
+a = nil
+? x % 2 -> a = true
 ```
 
 Match:
 ```
-a = ? {x % 2 -> true; _ -> nil}
-
 a = ? {
     x % 2 -> {
         true
@@ -96,18 +98,31 @@ a = ? {
         nil
     }
 }
+
+// or
+a = ? {x % 2 -> true; _ -> nil}
 ```
 
 
 ## Loops - while, for-in
 
-There is no way to explicitly break/continue or return from inside loop.
+While loop (with `break`, `continue` and `return` keywords):
 ```
-a = 0
+f = (n) -> {
+    a = 0
 
-a < 10 @ {
-    a = a + 1
+    a < n @ {
+        a = a + 1
+
+        ? {
+            a == 5 -> break
+            a > 5 -> continue
+            a == 9 -> return a
+        }
+    }
 }
+
+f(10)
 ```
 
 Generator:
@@ -120,7 +135,7 @@ range = (b, e, s) -> {
 }
 
 range = (b, e, s) -> ? {
-    b < e -> [b, (_) -> range(b + s, e, s)]}
+    b < e -> [b, (_) -> range(b + s, e, s)]
     _ -> [nil, nil]
 }
 

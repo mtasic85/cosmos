@@ -3,61 +3,97 @@
 #include <string.h>
 #include <stdbool.h>
 
-//
-// c_storage
-//
-struct c_storage_t;
+enum co_type_t;
+union co_value_t;
+typedef _Bool co_bool_t;
+typedef int64_t co_int_t;
+typedef double co_float_t;
+struct co_bytes_t;
+struct co_str_t;
+struct co_list_t;
+struct co_set_t;
+struct co_dict_t;
+struct co_code_t;
+struct co_function_t;
+struct co_object_t;
 
-typedef struct c_storage_t {
+typedef enum co_type_t {
+    CO_TYPE_NIL,
+    CO_TYPE_BOOL,
+    CO_TYPE_INT,
+    CO_TYPE_FLOAT,
+    CO_TYPE_BYTES,
+    CO_TYPE_STR,
+    CO_TYPE_LIST,
+    CO_TYPE_SET,
+    CO_TYPE_DICT,
+    CO_TYPE_CODE,
+    CO_TYPE_FUNCTION,
+    CO_TYPE_C_DATA
+} co_type_t;
+
+typedef union co_value_t {
+    co_bool_t * bool_;
+    co_int_t * int_;
+    co_float_t * float_;
+    struct co_bytes_t * bytes;
+    struct co_str_t * str;
+    struct co_list_t * list;
+    struct co_set_t * set;
+    struct co_dict_t * dict;
+    struct co_code_t * code;
+    struct co_function_t * function;
+    void * c_data;
+} co_value_t;
+
+typedef struct co_object_t {
+    size_t rc;  // reference count
+    enum co_type_t type;
+    union co_value_t value;
+} co_object_t;
+
+typedef struct co_bytes_t {
+    size_t len;
+    char * items;
+} co_bytes_t;
+
+typedef struct co_str_t {
+    size_t len;
+    char * items;
+} co_str_t;
+
+typedef struct co_list_t {
+    size_t len;
     size_t cap;
-    unsigned char *data;
-} c_storage_t;
+    struct co_object_t ** items;
+} co_list_t;
 
-struct c_storage_t *co_c_storage_new(size_t cap);
-bool co_c_storage_free(struct c_storage_t *storage);
+typedef struct co_set_t {
+    size_t fill;
+    size_t used;
+    size_t mask;
+    struct co_object_t ** items;
+} co_set_t;
 
+typedef struct co_dict_item_t {
+    struct co_object_t * key;
+    struct co_object_t * value;
+} co_dict_item_t;
 
-//
-// c_array
-//
-struct co_c_array_t;
+typedef struct co_dict_t {
+    size_t fill;
+    size_t used;
+    size_t mask;
+    struct co_dict_item_t ** items;
+} co_dict_t;
 
-typedef struct co_c_array_t {
-    size_t rc;
-    size_t len;
-    unsigned char *data;
-    struct c_storage_t *storage;
-} co_c_array_t;
+typedef struct co_code_t {
+    void * dummy;
+} co_code_t;
 
-struct co_c_array_t *co_c_array_new(size_t item_size, size_t cap);
-bool co_c_array_free(struct co_c_array_t *array);
-void c_c_array_ref(struct co_c_array_t *array);
-void c_c_array_unref(struct co_c_array_t *array);
-int co_c_array_cmp(struct co_c_array_t *array, struct co_c_array_t *other);
-int co_c_array_cmp_with_cstr(struct co_c_array_t *array, size_t len, char *items);
-int co_c_array_cmp_with_char(struct co_c_array_t *array, char *items);
-struct co_c_array_t *co_c_array_append(struct co_c_array_t *array, void *value);
-bool co_c_array_mut_append(struct co_c_array_t *array, void *value);
-struct co_c_array_t *co_c_array_remove(struct co_c_array_t *array, void *value);
-bool co_c_array_mut_remove(struct co_c_array_t *array, void *value);
-int co_c_array_index(struct co_c_array_t *array, void *value);
-void *co_c_array_get(struct co_c_array_t *array, size_t index);
-struct co_c_array_t *co_c_array_set(struct co_c_array_t *array, size_t index, void *value);
-bool co_c_array_mut_set(struct co_c_array_t *array, size_t index, void *value);
-struct co_c_array_t *co_c_array_del(struct co_c_array_t *array, size_t index);
-bool co_c_array_mul_del(struct co_c_array_t *array, size_t index);
-struct co_c_array_t *co_c_array_clear(struct co_c_array_t *array);
-bool co_c_array_mul_clear(struct co_c_array_t *array);
-
-//
-// c_map
-//
-typedef struct co_c_map_t {
-    size_t rc;
-    size_t len;
-    unsigned char *data;
-    struct c_storage_t *storage;
-} co_c_map_t;
+typedef struct co_function_t {
+    void * dummy;
+} co_function_t;
 
 //
 // common
@@ -91,56 +127,56 @@ bool co_parser_expect(struct co_parser_t *parser, enum co_symbol_t symbol);
 struct co_ast_t *co_parser_parse(struct co_parser_t *parser);
 
 typedef enum co_symbol_t {
-    CO_ERRORTOKEN,
-    CO_BEGINMARKER,
-    CO_ENDMARKER,
-    CO_NEWLINE,
-    CO_NAME,
-    CO_NUMBER,
-    CO_STRING,
-    CO_LPAR,
-    CO_RPAR,
-    CO_LSQB,
-    CO_RSQB,
-    CO_LBRACE,
-    CO_RBRACE,
-    CO_COLON,
-    CO_COMMA,
-    CO_SEMI,
-    CO_AT,
-    CO_PLUS,
-    CO_MINUS,
-    CO_STAR,
-    CO_SLASH,
-    CO_DOUBLESLASH,
-    CO_VBAR,
-    CO_AMPER,
-    CO_LESS,
-    CO_GREATER,
-    CO_EQUAL,
-    CO_DOT,
-    CO_PERCENT,
-    CO_EQEQUAL,
-    CO_NOTEQUAL,
-    CO_LESSEQUAL,
-    CO_GREATEREQUAL,
-    CO_TILDE,
-    CO_CIRCUMFLEX,
-    CO_LEFTSHIFT,
-    CO_RIGHTSHIFT,
-    CO_DOUBLESTAR,
-    CO_PLUSEQUAL,
-    CO_MINEQUAL,
-    CO_STAREQUAL,
-    CO_SLASHEQUAL,
-    CO_PERCENTEQUAL,
-    CO_AMPEREQUAL,
-    CO_VBAREQUAL,
-    CO_CIRCUMFLEXEQUAL,
-    CO_LEFTSHIFTEQUAL,
-    CO_RIGHTSHIFTEQUAL,
-    CO_DOUBLESTAREQUAL,
-    CO_DOUBLESLASHEQUAL
+    CO_SYMBOL_ERRORTOKEN,
+    CO_SYMBOL_BEGINMARKER,
+    CO_SYMBOL_ENDMARKER,
+    CO_SYMBOL_NEWLINE,
+    CO_SYMBOL_NAME,
+    CO_SYMBOL_NUMBER,
+    CO_SYMBOL_STRING,
+    CO_SYMBOL_LPAR,
+    CO_SYMBOL_RPAR,
+    CO_SYMBOL_LSQB,
+    CO_SYMBOL_RSQB,
+    CO_SYMBOL_LBRACE,
+    CO_SYMBOL_RBRACE,
+    CO_SYMBOL_COLON,
+    CO_SYMBOL_COMMA,
+    CO_SYMBOL_SEMI,
+    CO_SYMBOL_AT,
+    CO_SYMBOL_PLUS,
+    CO_SYMBOL_MINUS,
+    CO_SYMBOL_STAR,
+    CO_SYMBOL_SLASH,
+    CO_SYMBOL_DOUBLESLASH,
+    CO_SYMBOL_VBAR,
+    CO_SYMBOL_AMPER,
+    CO_SYMBOL_LESS,
+    CO_SYMBOL_GREATER,
+    CO_SYMBOL_EQUAL,
+    CO_SYMBOL_DOT,
+    CO_SYMBOL_PERCENT,
+    CO_SYMBOL_EQEQUAL,
+    CO_SYMBOL_NOTEQUAL,
+    CO_SYMBOL_LESSEQUAL,
+    CO_SYMBOL_GREATEREQUAL,
+    CO_SYMBOL_TILDE,
+    CO_SYMBOL_CIRCUMFLEX,
+    CO_SYMBOL_LEFTSHIFT,
+    CO_SYMBOL_RIGHTSHIFT,
+    CO_SYMBOL_DOUBLESTAR,
+    CO_SYMBOL_PLUSEQUAL,
+    CO_SYMBOL_MINEQUAL,
+    CO_SYMBOL_STAREQUAL,
+    CO_SYMBOL_SLASHEQUAL,
+    CO_SYMBOL_PERCENTEQUAL,
+    CO_SYMBOL_AMPEREQUAL,
+    CO_SYMBOL_VBAREQUAL,
+    CO_SYMBOL_CIRCUMFLEXEQUAL,
+    CO_SYMBOL_LEFTSHIFTEQUAL,
+    CO_SYMBOL_RIGHTSHIFTEQUAL,
+    CO_SYMBOL_DOUBLESTAREQUAL,
+    CO_SYMBOL_DOUBLESLASHEQUAL
 } co_symbol_t;
 
 typedef struct co_token_t {
