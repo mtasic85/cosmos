@@ -2,7 +2,7 @@ thread = import('cosmos/thread')
 Thread = thread.Thread
 tjoin = thread.join
 
-a = range(100)
+a = range(1000000)
 N = 4
 
 threads = map(range(N), (i) -> {
@@ -10,13 +10,13 @@ threads = map(range(N), (i) -> {
     e = (i + 1) * len(a) / N
     b = a[s, e]
 
-    Thread(() -> {
+    Thread((self) -> {
         reduce(b, 0, (accu, i) -> {accu + i})
     })
 })
 
 threads_map = tjoin(threads)
 
-map(threads_map, (t, r) -> {
+each(threads_map, (t, r) -> {
     print('thread:', t, 'result:', r)
 })
