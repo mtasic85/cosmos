@@ -1,99 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
-enum co_type_t;
-union co_value_t;
-typedef _Bool co_bool_t;
-typedef int64_t co_int_t;
-typedef double co_float_t;
-struct co_bytes_t;
-struct co_str_t;
-struct co_list_t;
-struct co_set_t;
-struct co_dict_t;
-struct co_code_t;
-struct co_function_t;
-struct co_object_t;
-
-typedef enum co_type_t {
-    CO_TYPE_NIL,
-    CO_TYPE_BOOL,
-    CO_TYPE_INT,
-    CO_TYPE_FLOAT,
-    CO_TYPE_BYTES,
-    CO_TYPE_STR,
-    CO_TYPE_LIST,
-    CO_TYPE_SET,
-    CO_TYPE_DICT,
-    CO_TYPE_CODE,
-    CO_TYPE_FUNCTION,
-    CO_TYPE_C_DATA
-} co_type_t;
-
-typedef union co_value_t {
-    co_bool_t * bool_;
-    co_int_t * int_;
-    co_float_t * float_;
-    struct co_bytes_t * bytes;
-    struct co_str_t * str;
-    struct co_list_t * list;
-    struct co_set_t * set;
-    struct co_dict_t * dict;
-    struct co_code_t * code;
-    struct co_function_t * function;
-    void * c_data;
-} co_value_t;
-
-typedef struct co_object_t {
-    size_t rc;  // reference count
-    enum co_type_t type;
-    union co_value_t value;
-} co_object_t;
-
-typedef struct co_bytes_t {
-    size_t len;
-    char * items;
-} co_bytes_t;
-
-typedef struct co_str_t {
-    size_t len;
-    char * items;
-} co_str_t;
-
-typedef struct co_list_t {
-    size_t len;
-    size_t cap;
-    struct co_object_t ** items;
-} co_list_t;
-
-typedef struct co_set_t {
-    size_t fill;
-    size_t used;
-    size_t mask;
-    struct co_object_t ** items;
-} co_set_t;
-
-typedef struct co_dict_item_t {
-    struct co_object_t * key;
-    struct co_object_t * value;
-} co_dict_item_t;
-
-typedef struct co_dict_t {
-    size_t fill;
-    size_t used;
-    size_t mask;
-    struct co_dict_item_t ** items;
-} co_dict_t;
-
-typedef struct co_code_t {
-    void * dummy;
-} co_code_t;
-
-typedef struct co_function_t {
-    void * dummy;
-} co_function_t;
+#include "cosmos.h"
 
 //
 // common
@@ -107,12 +12,6 @@ void co_c_error(const char *msg) {
 //
 // parser
 //
-enum co_symbol_t;
-struct co_token_t;
-struct co_tokenizer_t;
-struct co_ast_t;
-struct co_parser_t;
-
 struct co_token_t *co_token_new(enum co_symbol_t symbol, const char * str, size_t len, size_t begin, size_t end);
 bool co_token_free(struct co_token_t *token);
 
