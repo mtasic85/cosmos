@@ -5,7 +5,7 @@
 ## Simple Values
 
 ```
-a = nil             // nil
+a = null            // null
 b = true || false   // bool
 c = -1 + 0.333      // int and float
 d = 'some string'   // str
@@ -15,9 +15,9 @@ d = 'some string'   // str
 ## Collections
 
 ```
-a = [0, 1, nil] + []                    // list
+a = [0, 1, null] + []                    // list
 b = {-2, true, false} + {/}             // set
-c = {'a': a, 'b': b, 'c': nil} + {}     // dict
+c = {'a': a, 'b': b, 'c': null} + {}     // dict
 ```
 
 ## Functions
@@ -80,10 +80,10 @@ If/else:
 ```
 x = 10
 
-a = x % 2 ? true : nil
+a = x % 2 ? true : null
 
 // or
-a = nil
+a = null
 ? x % 2 -> a = true
 ```
 
@@ -95,12 +95,12 @@ a = ? {
     }
     
     _ -> {
-        nil
+        null
     }
 }
 
 // or
-a = ? {x % 2 -> true; _ -> nil}
+a = ? {x % 2 -> true; _ -> null}
 ```
 
 
@@ -130,23 +130,23 @@ Generator:
 range = (b, e, s) -> {
   ? {
     b < e -> [b, (_) -> range(b + s, e, s)]}
-    _ -> [nil, nil]
+    _ -> [null, null]
   }
 }
 
 range = (b, e, s) -> ? {
     b < e -> [b, (_) -> range(b + s, e, s)]
-    _ -> [nil, nil]
+    _ -> [null, null]
 }
 
-range = (b, e, s) -> b < e ? [b, (_) -> range(b + s, e, s)] : [nil, nil]
+range = (b, e, s) -> b < e ? [b, (_) -> range(b + s, e, s)] : [null, null]
 ```
 
 Manual loop iteration:
 ```
 i, next = range(0, 10, 2)
 
-next != nil @ {
+next != null @ {
   i, next = g()
 }
 ```
