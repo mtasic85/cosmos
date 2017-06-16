@@ -15,9 +15,9 @@ d = 'some string'   // str
 ## Collections
 
 ```
-a = [0, 1, null] + []                    // list
+a = [0, 1, null] + []                   // list
 b = {-2, true, false} + {/}             // set
-c = {'a': a, 'b': b, 'c': null} + {}     // dict
+c = {'a': a, 'b': b, 'c': null} + {}    // dict
 ```
 
 ## Functions

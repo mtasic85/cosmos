@@ -14,18 +14,19 @@ void co_c_error(const char *msg);
 //
 // parser
 //
-struct co_token_t *co_token_new(enum co_symbol_t symbol, const char * str, size_t len, size_t begin, size_t end);
-bool co_token_free(struct co_token_t *token);
+struct co_token_t * co_token_new(enum co_symbol_t symbol, const char * str, size_t len, size_t begin, size_t end);
+bool co_token_free(struct co_token_t * token);
+void co_token_repr(struct co_token_t * token);
 
-struct co_tokenizer_t *co_tokenizer_new(char *path);
-bool co_tokenizer_free(struct co_tokenizer_t *tokenizer);
-void co_tokenizer_nextsym(struct co_tokenizer_t *tokenizer);
+struct co_tokenizer_t * co_tokenizer_new(char * path);
+bool co_tokenizer_free(struct co_tokenizer_t * tokenizer);
+void co_tokenizer_nextsym(struct co_tokenizer_t * tokenizer);
 
-struct co_parser_t *co_parser_new(struct co_tokenizer_t *tokenizer);
-bool co_parser_free(struct co_parser_t *parser);
-bool co_parser_accept(struct co_parser_t *parser, enum co_symbol_t symbol);
-bool co_parser_expect(struct co_parser_t *parser, enum co_symbol_t symbol);
-struct co_ast_t *co_parser_parse(struct co_parser_t *parser);
+struct co_parser_t * co_parser_new(struct co_tokenizer_t * tokenizer);
+bool co_parser_free(struct co_parser_t * parser);
+bool co_parser_accept(struct co_parser_t * parser, enum co_symbol_t symbol);
+bool co_parser_expect(struct co_parser_t * parser, enum co_symbol_t symbol);
+struct co_ast_t * co_parser_parse(struct co_parser_t * parser);
 
 typedef enum co_symbol_t {
     CO_SYMBOL_ERRORTOKEN,
@@ -89,10 +90,10 @@ typedef struct co_token_t {
 } co_token_t;
 
 typedef struct co_tokenizer_t {
-    char *path;
-    char *source_code;
+    char * path;
+    char * source_code;
     size_t source_code_len;
-    struct co_token_t *token;
+    struct co_token_t * token;
 } co_tokenizer_t;
 
 typedef struct co_ast_t {
@@ -100,7 +101,7 @@ typedef struct co_ast_t {
 } co_ast_t;
 
 typedef struct co_parser_t {
-    struct co_tokenizer_t *tokenizer;
+    struct co_tokenizer_t * tokenizer;
 } co_parser_t;
 
 
