@@ -69,6 +69,8 @@ b = {
     }
 }
 
+b = b.x = b.x.y = b.x.y.z = 20
+
 b = b.x = b.x.y = {z = 20}
 b = setattr(b, 'x', setattr(b.x, 'y', {z = 20}))
 ```
@@ -85,6 +87,10 @@ a = x % 2 ? true : null
 // or
 a = null
 ? x % 2 -> a = true
+
+// or
+// a = ? {x % 2 -> true; _ -> null}
+// a = ? x % 2
 ```
 
 Match:
