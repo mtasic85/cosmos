@@ -1,0 +1,24 @@
+a = 1 + 2 ** 3
+b = 1 / 2 / 3
+
+n @ range(10) {
+    print(n)
+}
+
+map(range(10), (n) -> {
+    print(n)
+})
+
+a = n == 1 ? true : false
+
+n == 1 ? {a = true} : {a = false}
+
+a = n == 1 ? {
+        true
+    } : n == 2 ? {
+        false
+    } : {
+        null
+    }
+
+a = map(range(10), (n) -> n)
