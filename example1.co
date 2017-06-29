@@ -21,4 +21,8 @@ a = n == 1 ? {
         null
     }
 
+a = n == 1 ? true :
+    n == 2 ? false :
+    null
+
 a = map(range(10), (n) -> n)

@@ -14,6 +14,12 @@ void co_c_error(const char *msg);
 //
 // parser
 //
+enum co_symbol_t;
+struct co_token_t;
+struct co_tokenizer_t;
+struct co_ast_t;
+struct co_parser_t;
+
 struct co_token_t * co_token_new(enum co_symbol_t symbol, const char * str, size_t len, size_t begin, size_t end);
 bool co_token_free(struct co_token_t * token);
 void co_token_repr(struct co_token_t * token);

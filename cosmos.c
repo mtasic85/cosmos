@@ -125,7 +125,7 @@ struct co_ast_t *co_parser_parse(struct co_parser_t *parser) {
 // main
 //
 int main(int argc, char **argv) {
-    struct co_tokenizer_t * tokenizer = co_tokenizer_new("example_hello_world.co");
+    struct co_tokenizer_t * tokenizer = co_tokenizer_new("example1.co");
     struct co_parser_t * parser = co_parser_new(tokenizer);
     struct co_ast_t * ast = co_parser_parse(parser);
     co_parser_free(parser);
