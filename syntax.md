@@ -85,28 +85,19 @@ x = 10
 a = x % 2 ? true : null
 
 // or
-a = null
-? x % 2 -> a = true
+a = x % 2 ?
+    true :
+    null
 
 // or
-// a = ? {x % 2 -> true; _ -> null}
-// a = ? x % 2
-```
-
-Match:
-```
-a = ? {
-    x % 2 -> {
-        true
-    }
-    
-    _ -> {
-        null
-    }
+a = x % 2 ? {
+    true
+} : {
+    null
 }
 
 // or
-a = ? {x % 2 -> true; _ -> null}
+a = x % 2 ? { true } : { null }
 ```
 
 
