@@ -22,20 +22,11 @@ c = {'a': a, 'b': b, 'c': null} + {}    // dict
 
 ## Functions
 
-Using `return` keyword:
-```
-f = (x, y) -> {
-    return x + y
-}
-```
-
 Last expressions is return value:
 ```
 f = (x, y) -> {x + y}
-```
 
-Or:
-```
+// or
 f = (x, y) -> x + y
 ```
 
@@ -85,37 +76,26 @@ x = 10
 a = x % 2 ? true : null
 
 // or
-a = x % 2 ?
-    true :
-    null
-
-// or
-a = x % 2 ? {
-    true
+x % 2 ? {
+    a = true
 } : {
-    null
+    a = null
 }
 
 // or
-a = x % 2 ? { true } : { null }
+x % 2 ? { a = true } : { a = null }
 ```
 
 
 ## Loops - while, for-in
 
-While loop (with `break`, `continue` and `return` keywords):
+While loop:
 ```
 f = (n) -> {
     a = 0
 
     a < n @ {
         a = a + 1
-
-        ? {
-            a == 5 -> break
-            a > 5 -> continue
-            a == 9 -> return a
-        }
     }
 }
 
@@ -125,15 +105,15 @@ f(10)
 Generator:
 ```
 range = (b, e, s) -> {
-  ? {
-    b < e -> [b, (_) -> range(b + s, e, s)]}
-    _ -> [null, null]
-  }
+    b < e ? {
+        [b, (_) -> range(b + s, e, s)]
+    } : {
+        [null, null]
+    }
 }
 
-range = (b, e, s) -> ? {
-    b < e -> [b, (_) -> range(b + s, e, s)]
-    _ -> [null, null]
+range = (b, e, s) -> {
+    b < e ? [b, (_) -> range(b + s, e, s)] : [null, null]
 }
 
 range = (b, e, s) -> b < e ? [b, (_) -> range(b + s, e, s)] : [null, null]
